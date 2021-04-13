@@ -75,10 +75,30 @@ class YTDLSource(discord.PCMVolumeTransformer):
 class Music(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+    
+        self.filter = True  # We need to filter the messages?
+
+    async def __filter_message(self, ctx) -> bool:
+        message = ctx.message.content.lower()   
+       
+        forbidden_words = ["earrape", "timpani", "super suono", "loudest"]
+        
+        if self.filter:
+            for item in forbidden_words:
+                if item in message:
+                    await ctx.send('Ci hai provato {0}'.format(ctx.message.author.mention))
+                    return False
+               
+        return True   
+            
 
     @commands.command()
     async def yt(self, ctx, *, url):
-        """Plays from a url (almost anything youtube_dl supports)"""
+        """Plays from a url (almost anything youtube_dl supports)"""    #TODO Update the "aiuto" command using those strings in function
+        
+        if self.filter:
+            if await self.__filter_message(ctx) == False:
+                return
 
         async with ctx.typing():
 
@@ -90,7 +110,7 @@ class Music(commands.Cog):
     @commands.command()
     async def play(self, ctx, *, url):
         """Streams from a url (same as yt, but doesn't predownload)"""
-
+         
         async with ctx.typing():
             player = await YTDLSource.from_url(url, loop=self.bot.loop, stream=False, download_=False)
             ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
