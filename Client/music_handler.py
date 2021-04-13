@@ -1,5 +1,6 @@
 # TODO Change yt and stream commands to handle keyword search using youtubesearchpython
 
+import os
 import asyncio
 
 import discord
@@ -10,7 +11,7 @@ from dotenv import load_dotenv
 from discord.ext import commands
 
 load_dotenv()
-
+ADMIN_ID = os.getenv('ADMIN_ID')
 # Suppress noise about console usage from errors
 youtube_dl.utils.bug_reports_message = lambda: ''
 
@@ -113,7 +114,10 @@ class Music(commands.Cog):
     @commands.command()
     async def play(self, ctx, *, url):
         """Riproduce un video da yt senza scaricarlo"""
-         
+        
+        if self.filter:
+            if await self.__filter_message(ctx) == False:
+                return
         async with ctx.typing():
             player = await YTDLSource.from_url(url, loop=self.bot.loop, stream=False, download_=False)
             ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
@@ -139,7 +143,7 @@ class Music(commands.Cog):
     @commands.command()
     async def filtra(self, ctx):
         """ Abilità il filtro sulla ricerca di canzoni"""
-        if ctx.message.author == DADDY_ID:
+        if ctx.message.author == ADMIN_ID:
             if self.filter == False:
                 self.filter = True
                 await ctx.send('Il filtro sulla ricerca di canzoni è stato attivato')
@@ -147,7 +151,7 @@ class Music(commands.Cog):
                 self.filter = False
                 await ctx.send('Il filtro sulla ricerca di canzoni è stato disattivato')
         else:
-            await ctx.send('Non hai il permesso di usare questo comando {0}'.format(ctx.message.author.mention()))
+            await ctx.send('Non hai il permesso di usare questo comando {0}'.format(ctx.message.author.mention))
 
 
     @yt.before_invoke
