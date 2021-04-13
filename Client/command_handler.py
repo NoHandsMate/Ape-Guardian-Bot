@@ -19,7 +19,9 @@ async def on_ready():
 
 @bot.command()
 async def echo(ctx, *args):    # ctx = Context 
+    
     """ Ripete un messaggio """
+    
     if len(args) == 0:
         await ctx.send('You must provide some words!')
     else:
@@ -27,7 +29,9 @@ async def echo(ctx, *args):    # ctx = Context
 
 @bot.command()
 async def git(ctx):
+    
     """ Un comando che permette di avere il link per tutte le cose da fare sul bot"""
-   await ctx.send('Ecco il link per la lista di tutte le cose da fare')
-   await ctx.send('https://github.com/NoHandsMate/Ape-Guardian-Bot/projects/1')
+    
+    await ctx.send('Ecco il link per la lista di tutte le cose da fare')
+    await ctx.send('https://github.com/NoHandsMate/Ape-Guardian-Bot/projects/1')
 
