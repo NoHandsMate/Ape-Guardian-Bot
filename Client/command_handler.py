@@ -19,6 +19,7 @@ async def on_ready():
 
 @bot.command()
 async def echo(ctx, *args):    # ctx = Context 
+    """ Ripete un messaggio """
     if len(args) == 0:
         await ctx.send('You must provide some words!')
     else:
@@ -26,19 +27,7 @@ async def echo(ctx, *args):    # ctx = Context
 
 @bot.command()
 async def git(ctx):
+    """ Un comando che permette di avere il link per tutte le cose da fare sul bot"""
    await ctx.send('Ecco il link per la lista di tutte le cose da fare')
    await ctx.send('https://github.com/NoHandsMate/Ape-Guardian-Bot/projects/1')
-
-@bot.command()
-async def aiuto(ctx):           # Help command that shows all the command avaible
-   await ctx.send('\
-                   Ecco la lista di tutti i comandi: \n\
-                   $help: mostra questa lista\n\
-                   $echo ... : ripete tutte le parole scritte dopo echo\n\
-                   $git: mostra il link per la lista di tutte le cose da fare\n\
-                   Musica:\n\
-                   $play ... : cerca e riproduce un video da yt con delle parole-chiave o un url \n\
-                   $stop: ferma la riproduzione\n\
-                   $volume 0-300: aggiusta il volume\n\
-                   $yt ... : cerca e scarica un video da yt con delle parole-chiave o url')
 
