@@ -5,8 +5,11 @@ import asyncio
 import discord
 import youtube_dl
 
+from dotenv import load_dotenv
 
 from discord.ext import commands
+
+load_dotenv()
 
 # Suppress noise about console usage from errors
 youtube_dl.utils.bug_reports_message = lambda: ''
@@ -94,7 +97,7 @@ class Music(commands.Cog):
 
     @commands.command()
     async def yt(self, ctx, *, url):
-        """Plays from a url (almost anything youtube_dl supports)"""    #TODO Update the "aiuto" command using those strings in function
+        """Riproduce un video da yt scaricandolo"""    #TODO Update the "aiuto" command using those strings in function
         
         if self.filter:
             if await self.__filter_message(ctx) == False:
@@ -109,7 +112,7 @@ class Music(commands.Cog):
 
     @commands.command()
     async def play(self, ctx, *, url):
-        """Streams from a url (same as yt, but doesn't predownload)"""
+        """Riproduce un video da yt senza scaricarlo"""
          
         async with ctx.typing():
             player = await YTDLSource.from_url(url, loop=self.bot.loop, stream=False, download_=False)
@@ -119,7 +122,7 @@ class Music(commands.Cog):
 
     @commands.command()
     async def volume(self, ctx, volume: int):
-        """Changes the player's volume"""
+        """Modifica il volume del bot"""
 
         if ctx.voice_client is None:
             return await ctx.send("Not connected to a voice channel.")
@@ -129,9 +132,23 @@ class Music(commands.Cog):
 
     @commands.command()
     async def stop(self, ctx):
-        """Stops and disconnects the bot from voice"""
+        """Stoppa e disconnette il bot dal canale vocale"""
 
         await ctx.voice_client.disconnect()
+    
+    @commands.command()
+    async def filtra(self, ctx):
+        """ Abilità il filtro sulla ricerca di canzoni"""
+        if ctx.message.author == DADDY_ID:
+            if self.filter == False:
+                self.filter = True
+                await ctx.send('Il filtro sulla ricerca di canzoni è stato attivato')
+            else:
+                self.filter = False
+                await ctx.send('Il filtro sulla ricerca di canzoni è stato disattivato')
+        else:
+            await ctx.send('Non hai il permesso di usare questo comando {0}'.format(ctx.message.author.mention()))
+
 
     @yt.before_invoke
     @play.before_invoke
