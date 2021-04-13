@@ -1,5 +1,5 @@
-.env
-.webm
-.m4a
-.mp4
-.sh
+*.env
+*.webm
+*.m4a
+*.mp4
+*.sh
