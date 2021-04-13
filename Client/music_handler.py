@@ -81,7 +81,9 @@ class Music(commands.Cog):
         self.bot = bot
     
         self.filter = True  # We need to filter the messages?
-
+        self.queue = []
+        self.queue_ptr = 0
+    
     async def __filter_message(self, ctx) -> bool:
         message = ctx.message.content.lower()   
        
@@ -94,8 +96,8 @@ class Music(commands.Cog):
                     return False
                
         return True   
-            
-
+    
+           
     @commands.command()
     async def yt(self, ctx, *, url):
         """Riproduce un video da yt scaricandolo"""    #TODO Update the "aiuto" command using those strings in function
@@ -118,6 +120,7 @@ class Music(commands.Cog):
         if self.filter:
             if await self.__filter_message(ctx) == False:
                 return
+        
         async with ctx.typing():
             player = await YTDLSource.from_url(url, loop=self.bot.loop, stream=False, download_=False)
             ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
@@ -140,6 +143,20 @@ class Music(commands.Cog):
 
         await ctx.voice_client.disconnect()
     
+    @commands.command()
+    async def pause(self, ctx):
+        
+        """ Mette in pausa il bot """
+        
+        ctx.voice_client.pause()
+    
+    @commands.command()
+    async def resume(self, ctx):
+        
+        """Riprende la riproduzione del bot"""
+        
+        ctx.voice_client.resume()
+
     @commands.command()
     async def filtra(self, ctx):
         """ Abilità il filtro sulla ricerca di canzoni"""
