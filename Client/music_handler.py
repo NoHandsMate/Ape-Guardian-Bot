@@ -7,8 +7,8 @@ import discord
 import youtube_dl
 
 from dotenv import load_dotenv
-
 from discord.ext import commands
+from .utilities import hasNumbers, convert_numbers_in_letters
 
 load_dotenv()
 ADMIN_ID = os.getenv('ADMIN_ID')
@@ -88,6 +88,12 @@ class Music(commands.Cog):
         message = ctx.message.content.lower()
         new_message = "".join(message.split())
         
+        if hasNumbers(new_message):
+            print("INSIDE")
+            new_message = convert_numbers_in_letters(new_message)
+            
+        print(new_message)
+
         forbidden_words = ["earrape", "timpani", "super suono", "loudest", "ear"]
         
         if self.filter:
