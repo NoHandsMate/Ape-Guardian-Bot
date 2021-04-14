@@ -85,13 +85,14 @@ class Music(commands.Cog):
         self.queue_ptr = 0
     
     async def __filter_message(self, ctx) -> bool:
-        message = ctx.message.content.lower()   
-       
-        forbidden_words = ["earrape", "timpani", "super suono", "loudest"]
+        message = ctx.message.content.lower()
+        new_message = "".join(message.split())
+        
+        forbidden_words = ["earrape", "timpani", "super suono", "loudest", "ear"]
         
         if self.filter:
             for item in forbidden_words:
-                if item in message:
+                if item in new_message:
                     await ctx.send('Ci hai provato {0}'.format(ctx.message.author.mention))
                     return False
                
