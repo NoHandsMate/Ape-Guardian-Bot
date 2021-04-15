@@ -84,14 +84,14 @@ class Music(commands.Cog):
         self.queue = []
         self.queue_ptr = 0
     
-    async def __filter_message(self, ctx, title) -> bool:
+    async def __filter_title(self, ctx, title) -> bool:
         title_ = title.lower()
         new_title = "".join(title_.split())
         
         print(new_title)
 
         forbidden_words = ["earrape", "timpani", "super suono", "loudest", "ear",
-                           "high", "pitch", "alta frequenza", "rumoroso"]
+                           "high", "pitch", "alta frequenza", "rumoroso", "frequency"]
         
         for item in forbidden_words:
             if item in new_title:
@@ -100,6 +100,22 @@ class Music(commands.Cog):
                
         return True   
     
+    async def __filter_message(self, ctx) -> bool:
+        message = ctx.message.content.lower()
+        new_message = "".join(message.split())
+
+        print(new_message)
+
+        forbidden_words = ["earrape", "timpani", "super suono", "loudest", "ear",
+                           "high", "pitch", "alta frequenza", "rumoroso", "frequency"]
+
+        for item in forbidden_words:
+            if item in new_message:
+                await ctx.send('Ci hai provato {0}'.format(ctx.message.author.mention))
+                return False
+
+        return True
+
            
     @commands.command()
     async def yt(self, ctx, *, url):
@@ -112,6 +128,11 @@ class Music(commands.Cog):
         async with ctx.typing():
 
             player = await YTDLSource.from_url(url, loop=self.bot.loop, stream=False, download_=True)
+
+            if self.filter:
+                if await self.__filter_title(ctx, player.title) == False:
+                    return
+
             ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
 
         await ctx.send('Now playing: {}'.format(player.title))
@@ -120,11 +141,15 @@ class Music(commands.Cog):
     async def play(self, ctx, *, url):
         """Riproduce un video da yt senza scaricarlo"""
         
+        if self.filter:
+            if await self.__filter_message(ctx) == False:
+                return
+
         async with ctx.typing():
             player = await YTDLSource.from_url(url, loop=self.bot.loop, stream=False, download_=False)
 
             if self.filter:
-                if await self.__filter_message(ctx, player.title) == False:
+                if await self.__filter_title(ctx, player.title) == False:
                     return
                 
             ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
