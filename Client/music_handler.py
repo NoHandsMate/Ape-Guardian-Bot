@@ -84,23 +84,19 @@ class Music(commands.Cog):
         self.queue = []
         self.queue_ptr = 0
     
-    async def __filter_message(self, ctx) -> bool:
-        message = ctx.message.content.lower()
-        new_message = "".join(message.split())
+    async def __filter_message(self, ctx, title) -> bool:
+        title_ = title.lower()
+        new_title = "".join(title_.split())
         
-        if hasNumbers(new_message):
-            print("INSIDE")
-            new_message = convert_numbers_in_letters(new_message)
-            
-        print(new_message)
+        print(new_title)
 
-        forbidden_words = ["earrape", "timpani", "super suono", "loudest", "ear"]
+        forbidden_words = ["earrape", "timpani", "super suono", "loudest", "ear",
+                           "high", "pitch", "alta frequenza", "rumoroso"]
         
-        if self.filter:
-            for item in forbidden_words:
-                if item in new_message:
-                    await ctx.send('Ci hai provato {0}'.format(ctx.message.author.mention))
-                    return False
+        for item in forbidden_words:
+            if item in new_title:
+                await ctx.send('Ci hai provato {0}'.format(ctx.message.author.mention))
+                return False
                
         return True   
     
@@ -124,12 +120,13 @@ class Music(commands.Cog):
     async def play(self, ctx, *, url):
         """Riproduce un video da yt senza scaricarlo"""
         
-        if self.filter:
-            if await self.__filter_message(ctx) == False:
-                return
-        
         async with ctx.typing():
             player = await YTDLSource.from_url(url, loop=self.bot.loop, stream=False, download_=False)
+
+            if self.filter:
+                if await self.__filter_message(ctx, player.title) == False:
+                    return
+                
             ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
 
         await ctx.send('Now playing: {}'.format(player.title))
