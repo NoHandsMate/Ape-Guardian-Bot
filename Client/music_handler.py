@@ -158,7 +158,9 @@ class Music(commands.Cog):
     @commands.command()
     async def volume(self, ctx, volume: int):
         """Modifica il volume del bot"""
-
+        
+        if volume > 300:
+            return await ctx.send("Massimo 300 tonno.")
         if ctx.voice_client is None:
             return await ctx.send("Not connected to a voice channel.")
 
