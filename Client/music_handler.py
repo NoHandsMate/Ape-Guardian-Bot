@@ -8,7 +8,6 @@ import youtube_dl
 
 from dotenv import load_dotenv
 from discord.ext import commands
-from .utilities import hasNumbers, convert_numbers_in_letters
 
 load_dotenv()
 ADMIN_ID = os.getenv('ADMIN_ID')
@@ -91,7 +90,8 @@ class Music(commands.Cog):
         print(new_title)
 
         forbidden_words = ["earrape", "timpani", "super suono", "loudest", "ear",
-                           "high", "pitch", "alta frequenza", "rumoroso", "frequency"]
+                           "high", "pitch", "alta frequenza", "rumoroso", "frequency",
+                           "painful", "extremely"]
         
         for item in forbidden_words:
             if item in new_title:
@@ -107,8 +107,8 @@ class Music(commands.Cog):
         print(new_message)
 
         forbidden_words = ["earrape", "timpani", "super suono", "loudest", "ear",
-                           "high", "pitch", "alta frequenza", "rumoroso", "frequency"]
-
+                           "high", "pitch", "alta frequenza", "rumoroso", "frequency",
+                           "painful", "extremely"]
         for item in forbidden_words:
             if item in new_message:
                 await ctx.send('Ci hai provato {0}'.format(ctx.message.author.mention))
