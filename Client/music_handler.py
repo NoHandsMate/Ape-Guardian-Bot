@@ -90,7 +90,8 @@ class Music(commands.Cog):
 
         forbidden_words = ["earrape", "timpani", "super suono", "loudest", "ear",
                            "high", "pitch", "alta frequenza", "rumoroso", "frequency",
-                           "painful", "extremely"]
+                           "painful", "extremely", "venditti", "fortissimo", "forte",
+                           "distruggi orecchie"]
         
         for item in forbidden_words:
             if item in new_title:
@@ -107,7 +108,8 @@ class Music(commands.Cog):
 
         forbidden_words = ["earrape", "timpani", "super suono", "loudest", "ear",
                            "high", "pitch", "alta frequenza", "rumoroso", "frequency",
-                           "painful", "extremely"]
+                           "painful", "extremely", "venditti", "fortissimo", "forte",
+                           "distruggi orecchie"]
         for item in forbidden_words:
             if item in new_message:
                 await ctx.send('Ci hai provato {0}'.format(ctx.message.author.mention))

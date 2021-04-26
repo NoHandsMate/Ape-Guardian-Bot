@@ -8,7 +8,7 @@ async def on_message(message):
     if message.author == bot.user:
         return
     if message.content.startswith('$'):
-        print('From {0.author}: {0.content}'.format(message))
+        print('From {0.author}: {0.content} | {0.created_at}'.format(message))
 
 @bot.listen()
 async def on_ready():
